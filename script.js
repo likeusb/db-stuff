@@ -26,11 +26,9 @@ function initialParse(data, passthrough) {
     adjustedData = data;
     var filtered1 = limitInsert(adjustedData, passthrough)
 
-    var filtered2 = Object.entries(filtered1)
-
     prodgrid.innerHTML = '';
-    for (let i = 0; i < filtered2.length; i++){
-        var product = Object.entries(filtered2[i][1][1]);
+    for (let i = 0; i < filtered1.length; i++){
+        var product = Object.entries(filtered1[i]);
         
         var imgSrc = product[1][1];
         var title = product[2][1];
@@ -78,8 +76,6 @@ function limitInsert(array, receiver) {
         limitInsertI = receiver;
     }
 
-    // console.log(limitInsertI, pageToSet, receiver);
-
     pageInput.value = pageToSet;
     
     var atob = document.getElementById('atob');
@@ -110,21 +106,21 @@ function limitInsert(array, receiver) {
 };
 
 document.getElementById('firstpage').addEventListener('click', function() {
-    initialParse(productList, 'first');
+    filterItems(productList, 'first');
 });
 
 document.getElementById('prev').addEventListener('click', function() {
     limitInsertI--;;
-    initialParse(productList);
+    filterItems(productList);
 });
 
 document.getElementById('next').addEventListener('click', function() {
     limitInsertI++;
-    initialParse(productList);
+    filterItems(productList);
 });
 
 document.getElementById('lastpage').addEventListener('click', function() {
-    initialParse(productList, 'last');
+    filterItems(productList, 'last');
 });
 
 pageInput.addEventListener('keyup', function() {
@@ -155,7 +151,7 @@ function updatePage(num) {
         num = highest;
     }
 
-    initialParse(productList, num)
+    filterItems(productList, num)
 };
 
 const items = [
@@ -167,30 +163,50 @@ const items = [
     ],
     [
         {name: 'item3', price: 50},
+    ],
+    [
+        {name: 'item3', price: 50},
     ]
 ];
 
+var itemsForComparison = [];
+
+for (let i = 0; i < items.length; i++) {
+    itemsForComparison.push(items[i][0]);
+}
+
+itemsForComparison.sort((a, b) => a.price - b.price);
+
 var productsForPushing = [];
+var productsForComparison = [];
 
-function filterItems(data) {
-    let test2 = {};
-    // productsForComparison = Object.entries(Object.entries(data)[0][1]);
-    // productsForComparison.sort((a, b) => a[1].price - b[1].price);
+function filterItems(data, passthrough) {
     var productsArrayified = Object.entries(Object.entries(data)[0][1]);
-    // console.log(productsArrayified, items)
-    for (let i = 0; i < productsArrayified.length; i++) {
-        // console.log(Object.entries(productsArrayified[i][1]));
-        var test1 = Object.entries(productsArrayified[i][1])
-        test2[test1[0][0]] = test1[0][1];
-        test2[test1[1][0]] = test1[1][1];
-        test2[test1[2][0]] = test1[2][1];
-        test2[test1[3][0]] = test1[3][1];
-        test2[test1[4][0]] = test1[4][1];
-        var test3 = [];
-        test3.push(test2);
-        console.log(test2)
-    }
+    var test4 = [];
+    test3 = [];
 
-    console.log(test3, items);
-    // initialParse(productsForComparison);
+    if (productsForComparison.length == productsArrayified.length) {
+        
+    } else {
+
+        for (let i = 0; i < productsArrayified.length; i++) {
+            var test1 = Object.entries(productsArrayified[i][1]);
+            let test2 = {};
+            test2[test1[0][0]] = test1[0][1];
+            test2[test1[1][0]] = test1[1][1];
+            test2[test1[2][0]] = test1[2][1];
+            test2[test1[3][0]] = test1[3][1];
+            test2[test1[4][0]] = test1[4][1];
+            test3 = [test2];
+            test4.push(test3);
+        }
+        
+        for (let i = 0; i < test4.length; i++) {
+            productsForComparison.push(test4[i][0]);
+        }
+        
+        productsForComparison.sort((a, b) => a.Price - b.Price);
+        
+    }
+    initialParse(productsForComparison, passthrough)
 }
