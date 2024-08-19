@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7"
+  },
+  "name": "shop-db-stuff",
+  "version": "1.0.0",
+  "description": "A little thing to help improve my JavaScript and NodeJS skills",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/likeusb/db-stuff.git"
+  },
+  "author": "likeusb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/likeusb/db-stuff/issues"
+  },
+  "homepage": "https://github.com/likeusb/db-stuff#readme"
+}
