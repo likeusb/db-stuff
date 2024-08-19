@@ -17,21 +17,20 @@ fetch('http://localhost:1337/products')
 var productGrid = document.getElementById('prodgrid');
 
 setTimeout(() => {
-    initialParse(productList);
+    filterItems(productList);
 }, 50);
 
 var adjustedData = '';
 
 function initialParse(data, passthrough) {
-    adjustedData = (Object.entries(data)[0][1]);
+    adjustedData = data;
     var filtered1 = limitInsert(adjustedData, passthrough)
 
     var filtered2 = Object.entries(filtered1)
-    // console.log(filtered2);
 
     prodgrid.innerHTML = '';
     for (let i = 0; i < filtered2.length; i++){
-        var product = Object.entries(filtered2[i][1]);
+        var product = Object.entries(filtered2[i][1][1]);
         
         var imgSrc = product[1][1];
         var title = product[2][1];
@@ -171,24 +170,27 @@ const items = [
     ]
 ];
 
-var itemsForComparison = [];
+var productsForPushing = [];
 
-console.log(items)
-for (let i = 0; i < items.length; i++) {
-    // console.log(items[i][0]);
-    itemsForComparison.push(items[i][0]);
+function filterItems(data) {
+    let test2 = {};
+    // productsForComparison = Object.entries(Object.entries(data)[0][1]);
+    // productsForComparison.sort((a, b) => a[1].price - b[1].price);
+    var productsArrayified = Object.entries(Object.entries(data)[0][1]);
+    // console.log(productsArrayified, items)
+    for (let i = 0; i < productsArrayified.length; i++) {
+        // console.log(Object.entries(productsArrayified[i][1]));
+        var test1 = Object.entries(productsArrayified[i][1])
+        test2[test1[0][0]] = test1[0][1];
+        test2[test1[1][0]] = test1[1][1];
+        test2[test1[2][0]] = test1[2][1];
+        test2[test1[3][0]] = test1[3][1];
+        test2[test1[4][0]] = test1[4][1];
+        var test3 = [];
+        test3.push(test2);
+        console.log(test2)
+    }
+
+    console.log(test3, items);
+    // initialParse(productsForComparison);
 }
-
-itemsForComparison.sort((a, b) => a.price - b.price);
-
-// console.log(itemsForComparison);
-
-var productsForComparison = [];
-
-setTimeout(() => {
-    var adapted = (Object.entries(productList)[0][1])
-
-    adapted.sort((a, b) => a.price - b.price);
-
-    // console.log(adapted);
-}, 100);
