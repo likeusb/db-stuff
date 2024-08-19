@@ -27,6 +27,7 @@ function initialParse(data, passthrough) {
     var filtered1 = limitInsert(adjustedData, passthrough)
 
     var filtered2 = Object.entries(filtered1)
+    // console.log(filtered2);
 
     prodgrid.innerHTML = '';
     for (let i = 0; i < filtered2.length; i++){
@@ -78,7 +79,7 @@ function limitInsert(array, receiver) {
         limitInsertI = receiver;
     }
 
-    console.log(limitInsertI, pageToSet, receiver);
+    // console.log(limitInsertI, pageToSet, receiver);
 
     pageInput.value = pageToSet;
     
@@ -156,4 +157,38 @@ function updatePage(num) {
     }
 
     initialParse(productList, num)
+};
+
+const items = [
+    [
+        {name: 'item1', price: 100},
+    ],
+    [
+        {name: 'item2', price: 200},
+    ],
+    [
+        {name: 'item3', price: 50},
+    ]
+];
+
+var itemsForComparison = [];
+
+console.log(items)
+for (let i = 0; i < items.length; i++) {
+    // console.log(items[i][0]);
+    itemsForComparison.push(items[i][0]);
 }
+
+itemsForComparison.sort((a, b) => a.price - b.price);
+
+// console.log(itemsForComparison);
+
+var productsForComparison = [];
+
+setTimeout(() => {
+    var adapted = (Object.entries(productList)[0][1])
+
+    adapted.sort((a, b) => a.price - b.price);
+
+    // console.log(adapted);
+}, 100);

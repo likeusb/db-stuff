@@ -101,6 +101,11 @@ main {
     gap: 20px;
 }
 
+.topControls {
+    gap: 10px;
+    display: flex;
+}
+
 .indicator {
     display: flex;
     width: 500px;
@@ -132,6 +137,16 @@ main {
     height: 30px;
     border: 1px solid var(--fc-prim);
     border-radius: 5px;
+}
+
+select {
+    background-color: var(--bg-sec);
+    color: var(--fc-prim);
+    border: 1px solid var(--fc-prim);
+    border-radius: 5px;
+    padding: 0 5px;
+    height: 30px;
+    font-size: clamp(1rem, 1.25dvw, 4rem);
 }
 
 .prodgrid {

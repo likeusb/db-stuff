@@ -9,15 +9,21 @@
 </head>
 <body>
     <main>
-        <div class="indicator">
-            <img src="img/firstpage.svg" alt="Go to the first page" id="firstpage">
-            <img src="img/left.svg" alt="Go to the previous page" id="prev">
-            <p id="indicator">
-                <span>Showing <span id="atob"></span> of <span id="total"></span> Page</span>
-                <input type="text" id="page" name="page">
-            </p>
-            <img src="img/right.svg" alt="Go to the next page" id="next">
-            <img src="img/lastpage.svg" alt="Go to the last page" id="lastpage">
+        <div class="topControls">
+            <div class="indicator">
+                <img src="img/firstpage.svg" alt="Go to the first page" id="firstpage">
+                <img src="img/left.svg" alt="Go to the previous page" id="prev">
+                <p id="indicator">
+                    <span>Showing <span id="atob"></span> of <span id="total"></span> Page</span>
+                    <input type="text" id="page" name="page">
+                </p>
+                <img src="img/right.svg" alt="Go to the next page" id="next">
+                <img src="img/lastpage.svg" alt="Go to the last page" id="lastpage">
+            </div>
+            <select name="sort" id="sort">
+                <option value="Priceas">Price, ascending</option>
+                <option value="Pricede">Price, descending</option>
+            </select>
         </div>
         <div class="prodgrid" id="prodgrid">
             <div class="product">
