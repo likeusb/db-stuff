@@ -8,10 +8,18 @@ fetch('http://localhost:1337/products')
         return response.json();
     })
     .then(products => {
-        productList = products.products;
+        productList = products;
     })
     .catch(error => {
         console.error('Error:', error);
     })
 
-console.log(productList);
+var products = [];
+
+setTimeout(() => {
+    products = (Object.entries(productList)[0][1]);
+}, 50);
+
+setTimeout(() => {
+    console.log(products);
+}, 50);
