@@ -20,13 +20,13 @@ setTimeout(() => {
     initialParse(productList);
 }, 50);
 
+var adjustedData = '';
+
 function initialParse(data, passthrough) {
-    var adjustedData = (Object.entries(data)[0][1]);
+    adjustedData = (Object.entries(data)[0][1]);
     var filtered1 = limitInsert(adjustedData, passthrough)
-    console.log(filtered1);
 
     var filtered2 = Object.entries(filtered1)
-    console.log(filtered2);
 
     prodgrid.innerHTML = '';
     for (let i = 0; i < filtered2.length; i++){
@@ -48,8 +48,9 @@ function initialParse(data, passthrough) {
 };
 
 var limitInsertI = 1;
+var pageInput = document.getElementById('page');
 
-function limitInsert(array, highOrLow) {
+function limitInsert(array, receiver) {
     var limit = 40;
     var highest = Math.ceil(array.length / limit);
     var lowest = 1;
@@ -61,17 +62,51 @@ function limitInsert(array, highOrLow) {
         limitInsertI = lowest;
     };
 
-    if (highOrLow === 'first') {
+    if (receiver === 'first') {
         limitInsertI = lowest;
     };
 
-    if (highOrLow === 'last') {3
+    if (receiver === 'last') {3
         limitInsertI = highest;
     };
 
-    return array.slice((limitInsertI - 1) * limit, limitInsertI * limit);
+    let pageToSet = '';
+    const numRegex = new RegExp(/[0-9]/g);
 
-    console.log(limitInsertI);
+    if (numRegex.test(receiver) == true) {
+        pageToSet = receiver;
+        limitInsertI = receiver;
+    }
+
+    console.log(limitInsertI, pageToSet, receiver);
+
+    pageInput.value = pageToSet;
+    
+    var atob = document.getElementById('atob');
+    var total = document.getElementById('total');
+
+    atob.innerHTML = "";
+    total.innerHTML = "";
+
+    var lowestInPage = '';
+    var highestInPage = '';
+
+    if (limitInsertI == 1) {
+        lowestInPage = 1;
+    } else if (limitInsertI != 1) {
+        lowestInPage = 1 + limit * (limitInsertI - 1);
+    }
+
+    if (limitInsertI == highest) {
+        highestInPage = array.length;
+    } else if (limitInsertI != highest) {
+        highestInPage = limit * limitInsertI; 
+    }
+
+    atob.insertAdjacentHTML('beforeend', lowestInPage+'-'+highestInPage);
+    total.insertAdjacentHTML('beforeend', array.length+',');
+
+    return array.slice((limitInsertI - 1) * limit, limitInsertI * limit);
 };
 
 document.getElementById('firstpage').addEventListener('click', function() {
@@ -91,3 +126,34 @@ document.getElementById('next').addEventListener('click', function() {
 document.getElementById('lastpage').addEventListener('click', function() {
     initialParse(productList, 'last');
 });
+
+pageInput.addEventListener('keyup', function() {
+    cleanInput(pageInput.value);
+});
+
+function cleanInput(toClean) {
+    const cleaner = new RegExp(/[0-9]/g);
+    var cleaned = toClean.match(cleaner).join('');
+    updatePage(cleaned);
+};  
+
+function updatePage(num) {
+    let array = adjustedData;
+    var limit = 40;
+    var highest = Math.ceil(array.length / limit);
+    var lowest = 1;
+
+    if (num == null) {
+        return
+    };
+
+    if (num < lowest) {
+        num = lowest;
+    }
+
+    if (num > highest) {
+        num = highest;
+    }
+
+    initialParse(productList, num)
+}
