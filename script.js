@@ -164,14 +164,13 @@ var sort = document.getElementById('sort')
 function filterItems(data, passthrough) {
     var productsArrayified = Object.entries(Object.entries(data)[0][1]);
     var test4 = [];
-    test3 = [];
+    var test3 = [];
+    var test0 = filterPrice(productsArrayified);
 
-    if (productsForComparison.length == productsArrayified.length) {
-        
+    if (productsForComparison.length == test0.length) {
     } else {
-
-        for (let i = 0; i < productsArrayified.length; i++) {
-            var test1 = Object.entries(productsArrayified[i][1]);
+        for (let i = 0; i < test0.length; i++) {
+            var test1 = Object.entries(test0[i][1]);
             let test2 = {};
             test2[test1[0][0]] = test1[0][1];
             test2[test1[1][0]] = test1[1][1];
@@ -202,3 +201,65 @@ setTimeout(() => {
         filterItems(productList);
     });
 }, 50);
+
+
+// Credit to: https://w3collective.com/double-range-slider-html-css-js/
+// In other words, hippity hoppity, your code is now our property.
+let rangeMin = 100;
+const range = document.querySelector(".range-selected");
+const rangeInput = document.querySelectorAll(".range-input input");
+const rangePrice = document.querySelectorAll(".range-price input");
+
+rangeInput.forEach((input) => {
+    input.addEventListener("input", (e) => {
+        let minRange = parseInt(rangeInput[0].value);
+        let maxRange = parseInt(rangeInput[1].value);
+        if (maxRange - minRange < rangeMin) {     
+            if (e.target.className === "min") {
+              rangeInput[0].value = maxRange - rangeMin;        
+            } else {
+              rangeInput[1].value = minRange + rangeMin;        
+            }
+        } else {
+            rangePrice[0].value = minRange;
+            rangePrice[1].value = maxRange;
+            range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
+            range.style.right = 100 - (maxRange / rangeInput[1].max) * 100 + "%";
+        }
+        filterItems(productList);
+        console.log('changed')
+    });
+});
+
+rangePrice.forEach((input) => {
+    input.addEventListener("input", (e) => {
+        let minPrice = rangePrice[0].value;
+        let maxPrice = rangePrice[1].value;
+        if (maxPrice - minPrice >= rangeMin && maxPrice <= rangeInput[1].max) {
+            if (e.target.className === "min") {
+              rangeInput[0].value = minPrice;
+              range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+            } else {
+              rangeInput[1].value = maxPrice;
+              range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+            }
+        }
+        filterItems(productList);
+        console.log('changed')
+    });
+});
+
+// Alright back to misery in the form of writing my own code
+var filteredData = [rangePrice[0].value, rangePrice[1].value];
+
+function filterPrice(data) {
+    var filteredProducts = [];
+
+    for (i = 0; i < data.length; i++) {
+        if (Object.entries(data[i][1])[4][1] > filteredData[0] && Object.entries(data[i][1])[4][1] < filteredData[1]) {
+            filteredProducts.push(data[i])
+        }
+    }
+
+    return filteredProducts;
+}

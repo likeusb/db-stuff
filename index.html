@@ -24,6 +24,23 @@
                 <option value="Priceas">Price, ascending</option>
                 <option value="Pricede">Price, descending</option>
             </select>
+            <!-- Credit to: https://w3collective.com/double-range-slider-html-css-js/
+                In other words, hippity hoppity, your code is now our property. -->
+            <div class="rangeselect">
+                <div class="range-slider">
+                    <span class="range-selected"></span>
+                </div>
+                <div class="range-input">
+                    <input type="range" class="min" min="0" max="1000" value="100" step="10">
+                    <input type="range" class="max" min="0" max="1000" value="1000" step="10">
+                </div>
+                <div class="range-price">      
+                    <label for="min">Min</label>
+                    <input type="number" name="min" value="100">      
+                    <label for="max">Max</label>
+                    <input type="number" name="max" value="1000">      
+                </div>
+            </div>
         </div>
         <div class="prodgrid" id="prodgrid">
             <div class="product">
