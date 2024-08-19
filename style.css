@@ -140,7 +140,7 @@ main {
 }
 
 select {
-    background-color: var(--bg-sec);
+    background-color: transparent;
     color: var(--fc-prim);
     border: 1px solid var(--fc-prim);
     border-radius: 5px;

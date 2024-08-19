@@ -76,6 +76,9 @@ function limitInsert(array, receiver) {
         limitInsertI = receiver;
     }
 
+    if (pageToSet == '') {
+        pageToSet = limitInsertI;
+    }
     pageInput.value = pageToSet;
     
     var atob = document.getElementById('atob');
@@ -154,31 +157,9 @@ function updatePage(num) {
     filterItems(productList, num)
 };
 
-const items = [
-    [
-        {name: 'item1', price: 100},
-    ],
-    [
-        {name: 'item2', price: 200},
-    ],
-    [
-        {name: 'item3', price: 50},
-    ],
-    [
-        {name: 'item3', price: 50},
-    ]
-];
-
-var itemsForComparison = [];
-
-for (let i = 0; i < items.length; i++) {
-    itemsForComparison.push(items[i][0]);
-}
-
-itemsForComparison.sort((a, b) => a.price - b.price);
-
 var productsForPushing = [];
 var productsForComparison = [];
+var sort = document.getElementById('sort')
 
 function filterItems(data, passthrough) {
     var productsArrayified = Object.entries(Object.entries(data)[0][1]);
@@ -204,9 +185,20 @@ function filterItems(data, passthrough) {
         for (let i = 0; i < test4.length; i++) {
             productsForComparison.push(test4[i][0]);
         }
-        
-        productsForComparison.sort((a, b) => a.Price - b.Price);
-        
     }
+
+    if (sort.value == 'Priceas') {
+        productsForComparison.sort((a, b) => a.Price - b.Price);
+    } else {
+        productsForComparison.sort((a, b) => b.Price - a.Price);
+    }
+    
     initialParse(productsForComparison, passthrough)
 }
+
+// I am aware that this is inefficient and a waste of code, however, if I dare to make it be as simple as ('click', filterItems(productList)), it breaks and I have not one clue why. I'll just keep it like this for now, I guess.
+setTimeout(() => {
+    sort.addEventListener('change', () => {
+        filterItems(productList);
+    });
+}, 50);
