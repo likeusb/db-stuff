@@ -26,6 +26,16 @@ function initialParse(data, passthrough) {
     adjustedData = data;
     var filtered1 = limitInsert(adjustedData, passthrough)
 
+    if (filtered1 == 'No products found') {
+        productGrid.innerHTML = '';
+        productGrid.insertAdjacentHTML('beforeend', `
+            <div class="CenterAlignError">
+                <h6>No products found. Change the filters and try again.</h6>
+            </div>
+        `);
+        return
+    }
+
     prodgrid.innerHTML = '';
     for (let i = 0; i < filtered1.length; i++){
         var product = Object.entries(filtered1[i]);
@@ -41,7 +51,11 @@ function initialParse(data, passthrough) {
                 <h2>${title}</h2>
                 <h4>${stock} in stock</h4>
                 <h4>$${price}</h4>
-            `)
+        `)
+        
+        if (filtered1.length == 0) {
+            prodgrid.insertAdjacentHTML('beforeend', 'No products found');
+        };
     };
 };
 
@@ -105,6 +119,10 @@ function limitInsert(array, receiver) {
     atob.insertAdjacentHTML('beforeend', lowestInPage+'-'+highestInPage);
     total.insertAdjacentHTML('beforeend', array.length+',');
 
+    if (array.length == 0) {
+        return 'No products found';
+    }
+
     return array.slice((limitInsertI - 1) * limit, limitInsertI * limit);
 };
 
@@ -166,32 +184,31 @@ function filterItems(data, passthrough) {
     var test4 = [];
     var test3 = [];
     var test0 = filterPrice(productsArrayified);
+    var test01 = filterAvailability(test0);
+    productsForComparison = [];
 
-    if (productsForComparison.length == test0.length) {
-    } else {
-        for (let i = 0; i < test0.length; i++) {
-            var test1 = Object.entries(test0[i][1]);
-            let test2 = {};
-            test2[test1[0][0]] = test1[0][1];
-            test2[test1[1][0]] = test1[1][1];
-            test2[test1[2][0]] = test1[2][1];
-            test2[test1[3][0]] = test1[3][1];
-            test2[test1[4][0]] = test1[4][1];
-            test3 = [test2];
-            test4.push(test3);
-        }
-        
-        for (let i = 0; i < test4.length; i++) {
-            productsForComparison.push(test4[i][0]);
-        }
+    for (let i = 0; i < test01.length; i++) {
+        var test1 = Object.entries(test01[i][1]);
+        let test2 = {};
+        test2[test1[0][0]] = test1[0][1];
+        test2[test1[1][0]] = test1[1][1];
+        test2[test1[2][0]] = test1[2][1];
+        test2[test1[3][0]] = test1[3][1];
+        test2[test1[4][0]] = test1[4][1];
+        test3 = [test2];
+        test4.push(test3);
     }
+    
+    for (let i = 0; i < test4.length; i++) {
+        productsForComparison.push(test4[i][0]);
+    };
 
     if (sort.value == 'Priceas') {
         productsForComparison.sort((a, b) => a.Price - b.Price);
     } else {
         productsForComparison.sort((a, b) => b.Price - a.Price);
-    }
-    
+    };
+
     initialParse(productsForComparison, passthrough)
 }
 
@@ -202,64 +219,59 @@ setTimeout(() => {
     });
 }, 50);
 
+var priceInput = [document.getElementById('priceMin'), document.getElementById('priceMax')];
+var priceInputValues = [priceInput[0].value, priceInput[1].value];
 
-// Credit to: https://w3collective.com/double-range-slider-html-css-js/
-// In other words, hippity hoppity, your code is now our property.
-let rangeMin = 100;
-const range = document.querySelector(".range-selected");
-const rangeInput = document.querySelectorAll(".range-input input");
-const rangePrice = document.querySelectorAll(".range-price input");
-
-rangeInput.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        let minRange = parseInt(rangeInput[0].value);
-        let maxRange = parseInt(rangeInput[1].value);
-        if (maxRange - minRange < rangeMin) {     
-            if (e.target.className === "min") {
-              rangeInput[0].value = maxRange - rangeMin;        
-            } else {
-              rangeInput[1].value = minRange + rangeMin;        
-            }
-        } else {
-            rangePrice[0].value = minRange;
-            rangePrice[1].value = maxRange;
-            range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
-            range.style.right = 100 - (maxRange / rangeInput[1].max) * 100 + "%";
-        }
+priceInput.forEach((input) => {
+    input.addEventListener('input', () => {
+        priceInputValues = [priceInput[0].value, priceInput[1].value];
         filterItems(productList);
-        console.log('changed')
+        changeLabels();
     });
 });
 
-rangePrice.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        let minPrice = rangePrice[0].value;
-        let maxPrice = rangePrice[1].value;
-        if (maxPrice - minPrice >= rangeMin && maxPrice <= rangeInput[1].max) {
-            if (e.target.className === "min") {
-              rangeInput[0].value = minPrice;
-              range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
-            } else {
-              rangeInput[1].value = maxPrice;
-              range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
-            }
-        }
-        filterItems(productList);
-        console.log('changed')
-    });
-});
+function changeLabels() {
+    var priceMinLabel = document.getElementById('lpriceMin');
+    var priceMaxLabel = document.getElementById('lpriceMax');
 
-// Alright back to misery in the form of writing my own code
-var filteredData = [rangePrice[0].value, rangePrice[1].value];
+    priceMinLabel.innerHTML = "";
+    priceMaxLabel.innerHTML = "";
+
+    priceMinLabel.insertAdjacentHTML('beforeend', priceInputValues[0]);
+    priceMaxLabel.insertAdjacentHTML('beforeend', priceInputValues[1]);
+};
 
 function filterPrice(data) {
     var filteredProducts = [];
 
     for (i = 0; i < data.length; i++) {
-        if (Object.entries(data[i][1])[4][1] > filteredData[0] && Object.entries(data[i][1])[4][1] < filteredData[1]) {
+        if (Object.entries(data[i][1])[4][1] >= priceInputValues[0] && Object.entries(data[i][1])[4][1] <= priceInputValues[1]) {
             filteredProducts.push(data[i])
         }
     }
 
     return filteredProducts;
 }
+
+var stockInput = document.getElementById('stock');
+console.log(stockInput.checked);
+var stockInputValues = stockInput.checked;
+
+stockInput.addEventListener('change', () => {
+    filterItems(productList);
+    stockInputValues = stockInput.checked;
+});
+
+function filterAvailability(data) {
+    var filteredProducts = [];
+
+    for (i = 0; i < data.length; i++) {
+        if (Object.entries(data[i][1])[3][1] > 0 && stockInputValues == true) {
+            filteredProducts.push(data[i])
+        } else if (stockInputValues == false) {
+            filteredProducts.push(data[i])
+        }
+    }
+
+    return filteredProducts;
+};
