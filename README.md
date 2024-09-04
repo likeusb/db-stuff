@@ -6,3 +6,6 @@ How to start Express server:
 - Run `npm i`
 - Then, run `npm start`
 Feel free to open up the website after this.
+
+![image](https://github.com/user-attachments/assets/a5c4a152-c628-4997-9daf-87d80e8d1bda)
+https://likeusb.github.io/db-stuff/
